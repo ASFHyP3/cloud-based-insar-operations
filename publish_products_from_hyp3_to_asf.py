@@ -92,9 +92,9 @@ def main(hyp3_urls: list, job_type: str, cmr_domain: str, collection_concept_id:
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cmr_domain', default='https://cmr.earthdata.nasa.gov',
+    parser.add_argument('--cmr-domain', default='https://cmr.earthdata.nasa.gov',
                         choices=['https://cmr.earthdata.nasa.gov', 'https://cmr.uat.earthdata.nasa.gov'])
-    parser.add_argument('--job_type', default='INSAR_ISCE',
+    parser.add_argument('--job-type', default='INSAR_ISCE',
                         choices=['INSAR_ISCE', 'INSAR_ISCE_TEST'])
     parser.add_argument('--collection-concept-id', default='C1595422627-ASF',
                         choices=['C1595422627-ASF', 'C1225776654-ASF'])
