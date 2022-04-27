@@ -1,0 +1,27 @@
+name: Publish products from HyP3 to ASF
+
+# TODO cron schedule
+on:
+  workflow_dispatch:
+
+env:
+  EARTHDATA_USERNAME: ${{ secrets.EARTHDATA_USERNAME }}
+  EARTHDATA_PASSWORD: ${{ secrets.EARTHDATA_PASSWORD }}
+  TOPIC_ARN: ${{ secrets.TOPIC_ARN }}
+  RESPONSE_TOPIC_ARN: ${{ secrets.RESPONSE_TOPIC_ARN }}
+
+jobs:
+  publish-products:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.10
+      - run: |
+          python publish_products_from_hyp3_to_asf.py \
+          --dry-run \
+          ${EARTHDATA_USERNAME} \
+          ${EARTHDATA_PASSWORD} \
+          ${TOPIC_ARN} \
+          ${RESPONSE_TOPIC_ARN}
