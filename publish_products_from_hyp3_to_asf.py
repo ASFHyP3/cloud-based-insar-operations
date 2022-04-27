@@ -37,6 +37,7 @@ def generate_ingest_message(hyp3_job_dict: dict, response_topic_arn: str):
 
 
 def get_cmr_product_ids(cmr_domain, collection_concept_id):
+    print(f'Querying {cmr_domain} for GUNW products in collection {collection_concept_id}')
     session = requests.Session()
     cmr_url = urljoin(cmr_domain, '/search/granules.json')
     search_params = {
@@ -56,16 +57,20 @@ def get_cmr_product_ids(cmr_domain, collection_concept_id):
         headers = {'CMR-Search-After': response.headers['CMR-Search-After']}
 
     product_ids = [product['producer_granule_id'] for product in products]
+    print(f'Found {len(product_ids)} products in CMR')
     return product_ids
 
 
 def get_hyp3_jobs(hyp3_urls: list, job_type: str, username: str, password: str):
+    print(f'Querying {hyp3_urls} as user {username} for GUNW products ({job_type} jobs)')
     jobs = []
     for hyp3_url in hyp3_urls:
         hyp3 = hyp3_sdk.HyP3(hyp3_url, username, password)
         response = hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type)
         jobs.extend(response)
-    return [job.to_dict() for job in jobs if not job.expired()]
+    jobs = [job.to_dict() for job in jobs if not job.expired()]
+    print(f'Found {len(jobs)} products')
+    return jobs
 
 
 def publish_messages(messages: list, topic_arn: str, dry_run: bool):
