@@ -1,7 +1,8 @@
 name: Publish products from HyP3 to ASF
 
-# TODO cron schedule
 on:
+  schedule:
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 env:
