@@ -90,7 +90,7 @@ def main(hyp3_urls: list, job_type: str, cmr_domain: str, collection_concept_id:
          username: str, password: str, dry_run: bool, response_topic_arn: str):
     hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, username, password)
     ingest_messages = [generate_ingest_message(job, response_topic_arn) for job in hyp3_jobs]
-    cmr_product_ids = get_cmr_product_ids(cmr_domain, collection_concept_id)
+    cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_concept_id))
     ingest_messages = [message for message in ingest_messages if message['ProductName'] not in cmr_product_ids]
     publish_messages(ingest_messages, topic_arn, dry_run)
 
