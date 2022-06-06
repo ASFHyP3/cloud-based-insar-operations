@@ -69,8 +69,8 @@ def get_hyp3_jobs(password: str):
     username = 'access_cloud_based_insar'
     job_type = 'INSAR_ISCE'
 
-    start = datetime.datetime(2022, 5, 11, tzinfo=datetime.timezone.utc)
-    end = datetime.datetime(2022, 5, 12, tzinfo=datetime.timezone.utc)
+    start = '2022-05-11T00:00:00Z'
+    end = '2022-05-12T00:00:00Z'
 
     print(f'Querying {hyp3_url} as user {username} for GUNW products ({job_type} jobs)')
 
