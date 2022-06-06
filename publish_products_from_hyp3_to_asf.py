@@ -77,12 +77,32 @@ def get_hyp3_jobs(password: str):
     jobs = []
     hyp3 = hyp3_sdk.HyP3(hyp3_url, username, password)
 
-    jobs.extend(hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type, name='TibetA_165', start=start, end=end))
-    jobs.extend(hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type, name='TibetA_150', start=start, end=end))
-    jobs.extend(hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type, name='TibetA_158', start=start, end=end))
+    name = 'TibetA_165'
+    response = hyp3.find_jobs(job_type=job_type, name=name, start=start, end=end)
+    jobs.extend(response)
+    print(f'{name}: {len(response)} jobs')
 
-    jobs = [job.to_dict() for job in jobs if not job.expired()]
-    print(f'Found {len(jobs)} products')
+    name = 'TibetA_150'
+    response = hyp3.find_jobs(job_type=job_type, name=name, start=start, end=end)
+    jobs.extend(response)
+    print(f'{name}: {len(response)} jobs')
+
+    name = 'TibetA_158'
+    response = hyp3.find_jobs(job_type=job_type, name=name, start=start, end=end)
+    jobs.extend(response)
+    print(f'{name}: {len(response)} jobs')
+
+    succeeded = [job for job in jobs if job.status_code == 'SUCCEEDED']
+    failed = [job for job in jobs if job.status_code == 'FAILED']
+    running = [job for job in jobs if job.status_code == 'RUNNING']
+
+    assert len(succeeded) + len(failed) + len(running) == len(jobs)
+
+    print(f'Succeeded: {len(succeeded)}')
+    print(f'Failed: {len(failed)}')
+    print(f'Running: {len(running)}')
+
+    jobs = [job.to_dict() for job in succeeded]
     return jobs
 
 
