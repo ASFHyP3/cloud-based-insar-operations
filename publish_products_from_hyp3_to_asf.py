@@ -104,8 +104,8 @@ def get_args():
     parser.add_argument('--collection-concept-id', default='C1595422627-ASF',
                         choices=['C1595422627-ASF', 'C1225776654-ASF'])
     parser.add_argument('--hyp3-urls', nargs='+',
-                        default=['https://hyp3-tibet.asf.alaska.edu'],
-                        choices=['https://hyp3-isce.asf.alaska.edu', 'https://hyp3-tibet.asf.alaska.edu'])
+                        default=['https://hyp3-a19-jpl.asf.alaska.edu'],
+                        choices=['https://hyp3-a19-jpl.asf.alaska.edu'])
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('username')
     parser.add_argument('password')
