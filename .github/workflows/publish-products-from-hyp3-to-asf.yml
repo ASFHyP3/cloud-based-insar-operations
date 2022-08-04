@@ -1,8 +1,6 @@
 name: Publish products from HyP3 to ASF
 
 on:
-  schedule:
-    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 env:
