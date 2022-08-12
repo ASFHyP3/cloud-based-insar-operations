@@ -1,6 +1,8 @@
 name: Publish products from HyP3 to ASF
 
 on:
+  schedule:
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 env:
@@ -30,5 +32,4 @@ jobs:
           ${EARTHDATA_USERNAME} \
           ${EARTHDATA_PASSWORD} \
           ${TOPIC_ARN} \
-          ${RESPONSE_TOPIC_ARN} \
-          --hyp3-urls https://hyp3-tibet-jpl.asf.alaska.edu
+          ${RESPONSE_TOPIC_ARN}
