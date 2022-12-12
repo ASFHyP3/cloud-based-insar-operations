@@ -61,12 +61,12 @@ def get_cmr_product_ids(cmr_domain, collection_concept_id):
     return product_ids
 
 
-def get_hyp3_jobs(hyp3_urls: list, job_type: str, username: str, password: str):
+def get_hyp3_jobs(hyp3_urls: list, job_type: str, username: str, password: str, start: str):
     print(f'Querying {hyp3_urls} as user {username} for GUNW products ({job_type} jobs)')
     jobs = []
     for hyp3_url in hyp3_urls:
         hyp3 = hyp3_sdk.HyP3(hyp3_url, username, password)
-        response = hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type)
+        response = hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type, start=start)
         jobs.extend(response)
     jobs = [job.to_dict() for job in jobs if not job.expired()]
     print(f'Found {len(jobs)} products')
@@ -87,8 +87,8 @@ def publish_messages(messages: list, topic_arn: str, dry_run: bool):
 
 
 def main(hyp3_urls: list, job_type: str, cmr_domain: str, collection_concept_id: str, topic_arn: str,
-         username: str, password: str, dry_run: bool, response_topic_arn: str):
-    hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, username, password)
+         username: str, password: str, dry_run: bool, response_topic_arn: str, start: str):
+    hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, username, password, start)
     ingest_messages = [generate_ingest_message(job, response_topic_arn) for job in hyp3_jobs]
     cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_concept_id))
     ingest_messages = [message for message in ingest_messages if message['ProductName'] not in cmr_product_ids]
@@ -108,6 +108,7 @@ def get_args():
                                  'https://hyp3-nisar-jpl.asf.alaska.edu'],
                         choices=['https://hyp3-a19-jpl.asf.alaska.edu', 'https://hyp3-tibet-jpl.asf.alaska.edu',
                                  'https://hyp3-nisar-jpl.asf.alaska.edu'])
+    parser.add_argument('--start', default='2022-12-05T00:00:00+00:00')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('username')
     parser.add_argument('password')
@@ -120,4 +121,4 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     main(args.hyp3_urls, args.job_type, args.cmr_domain, args.collection_concept_id, args.topic_arn,
-         args.username, args.password, args.dry_run, args.response_topic_arn)
+         args.username, args.password, args.dry_run, args.response_topic_arn, args.start)
