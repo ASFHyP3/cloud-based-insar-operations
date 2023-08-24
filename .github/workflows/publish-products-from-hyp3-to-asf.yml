@@ -16,18 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: access19
-            cmr_domain: https://cmr.earthdata.nasa.gov
-            collection_concept_id: C1595422627-ASF
-            hyp3_urls: https://hyp3-a19-jpl.asf.alaska.edu https://hyp3-tibet-jpl.asf.alaska.edu https://hyp3-nisar-jpl.asf.alaska.edu
-            job_type: INSAR_ISCE
-
-          - environment: disasters
-            cmr_domain: https://cmr.earthdata.nasa.gov
-            collection_concept_id: C1595422627-ASF
-            hyp3_urls: https://hyp3-a19-jpl.asf.alaska.edu https://hyp3-tibet-jpl.asf.alaska.edu https://hyp3-nisar-jpl.asf.alaska.edu
-            job_type: INSAR_ISCE
-
           - environment: access19-test
             cmr_domain: https://cmr.uat.earthdata.nasa.gov
             collection_concept_id: C1225776654-ASF
