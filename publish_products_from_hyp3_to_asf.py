@@ -62,7 +62,7 @@ def get_cmr_product_ids(cmr_domain, collection_short_name):
 
 
 def get_hyp3_jobs(hyp3_urls: list, job_type: str, start: datetime, username: str, password: str):
-    print(f'Querying {hyp3_urls} as user {username} for GUNW products ({job_type} jobs)')
+    print(f'Querying {hyp3_urls} as user {username} for GUNW products ({job_type} jobs) since {start}')
     jobs = []
     for hyp3_url in hyp3_urls:
         hyp3 = hyp3_sdk.HyP3(hyp3_url, username, password)
