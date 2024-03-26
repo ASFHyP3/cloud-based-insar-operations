@@ -61,14 +61,12 @@ def get_cmr_product_ids(cmr_domain, collection_concept_id):
     return product_ids
 
 
-def get_hyp3_jobs(hyp3_urls: list, job_type: str, username: str, password: str):
+def get_hyp3_jobs(hyp3_urls: list, job_type: str, start: datetime, username: str, password: str):
     print(f'Querying {hyp3_urls} as user {username} for GUNW products ({job_type} jobs)')
     jobs = []
     for hyp3_url in hyp3_urls:
         hyp3 = hyp3_sdk.HyP3(hyp3_url, username, password)
-        response = hyp3.find_jobs(
-            status_code='SUCCEEDED', job_type=job_type, start=datetime(2024, 1, 1, tzinfo=timezone.utc)
-        )
+        response = hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type, start=start)
         jobs.extend(response)
     jobs = [job.to_dict() for job in jobs if not job.expired()]
     print(f'Found {len(jobs)} products')
@@ -88,13 +86,20 @@ def publish_messages(messages: list, topic_arn: str, dry_run: bool):
             )
 
 
-def main(hyp3_urls: list, job_type: str, cmr_domain: str, collection_concept_id: str, topic_arn: str,
+def main(hyp3_urls: list, job_type: str, start: datetime, cmr_domain: str, collection_concept_id: str, topic_arn: str,
          username: str, password: str, dry_run: bool, response_topic_arn: str):
-    hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, username, password)
+    hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, start, username, password)
     ingest_messages = [generate_ingest_message(job, response_topic_arn) for job in hyp3_jobs]
     cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_concept_id))
     ingest_messages = [message for message in ingest_messages if message['ProductName'] not in cmr_product_ids]
     publish_messages(ingest_messages, topic_arn, dry_run)
+
+
+def parse_datetime(s: str) -> datetime:
+    dt = datetime.fromisoformat(s)
+    if not dt.tzinfo:
+        raise ValueError(f'Datetime {s} must include timezone')
+    return dt
 
 
 def get_args():
@@ -103,6 +108,7 @@ def get_args():
                         choices=['https://cmr.earthdata.nasa.gov', 'https://cmr.uat.earthdata.nasa.gov'])
     parser.add_argument('--job-type', default='INSAR_ISCE',
                         choices=['INSAR_ISCE', 'INSAR_ISCE_TEST'])
+    parser.add_argument('--start', type=parse_datetime)
     parser.add_argument('--collection-concept-id', default='C1595422627-ASF',
                         choices=['C1595422627-ASF', 'C1225776654-ASF'])
     parser.add_argument('--hyp3-urls', nargs='+',
@@ -121,5 +127,5 @@ def get_args():
 # assumes you have AWS credentials with permission to publish to the SNS topic
 if __name__ == '__main__':
     args = get_args()
-    main(args.hyp3_urls, args.job_type, args.cmr_domain, args.collection_concept_id, args.topic_arn,
+    main(args.hyp3_urls, args.job_type, args.start, args.cmr_domain, args.collection_concept_id, args.topic_arn,
          args.username, args.password, args.dry_run, args.response_topic_arn)
