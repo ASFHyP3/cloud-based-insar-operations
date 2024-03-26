@@ -16,11 +16,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - environment: access19-test
-            cmr_domain: https://cmr.uat.earthdata.nasa.gov
+          - environment: access19
+            cmr_domain: https://cmr.earthdata.nasa.gov
             collection_short_name: ARIA_S1_GUNW
             hyp3_urls: https://hyp3-a19-jpl.asf.alaska.edu https://hyp3-tibet-jpl.asf.alaska.edu
             job_type: INSAR_ISCE
+            start: 2024-01-01T00:00:00+00:00
 
     environment: ${{ matrix.environment }}
     steps:
@@ -40,6 +41,7 @@ jobs:
           --collection-short-name ${{ matrix.collection_short_name }} \
           --hyp3-urls ${{ matrix.hyp3_urls }} \
           --job-type ${{ matrix.job_type }} \
+          --start ${{ matrix.start }} \
           ${{ secrets.EARTHDATA_USERNAME }} \
           ${{ secrets.EARTHDATA_PASSWORD }} \
           ${{ secrets.TOPIC_ARN }} \
