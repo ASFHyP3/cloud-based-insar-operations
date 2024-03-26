@@ -95,8 +95,8 @@ def main(hyp3_urls: list, job_type: str, start: datetime, cmr_domain: str, colle
     publish_messages(ingest_messages, topic_arn, dry_run)
 
 
-def parse_datetime(s: str) -> datetime:
-    dt = datetime.fromisoformat(s)
+def parse_datetime(s: str) -> datetime.datetime:
+    dt = datetime.datetime.fromisoformat(s)
     if not dt.tzinfo:
         raise ValueError(f'Datetime {s} must include timezone')
     return dt
