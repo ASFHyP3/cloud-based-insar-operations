@@ -66,7 +66,9 @@ def get_hyp3_jobs(hyp3_urls: list, job_type: str, username: str, password: str):
     jobs = []
     for hyp3_url in hyp3_urls:
         hyp3 = hyp3_sdk.HyP3(hyp3_url, username, password)
-        response = hyp3.find_jobs(status_code='SUCCEEDED', job_type=job_type)
+        response = hyp3.find_jobs(
+            status_code='SUCCEEDED', job_type=job_type, start=datetime(2024, 1, 1, tzinfo=timezone.utc)
+        )
         jobs.extend(response)
     jobs = [job.to_dict() for job in jobs if not job.expired()]
     print(f'Found {len(jobs)} products')
