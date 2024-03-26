@@ -18,7 +18,7 @@ jobs:
         include:
           - environment: access19-test
             cmr_domain: https://cmr.uat.earthdata.nasa.gov
-            collection_concept_id: C1225776654-ASF
+            collection_short_name: ARIA_S1_GUNW
             hyp3_urls: https://hyp3-a19-jpl.asf.alaska.edu https://hyp3-tibet-jpl.asf.alaska.edu
             job_type: INSAR_ISCE
 
@@ -37,7 +37,7 @@ jobs:
       - run: |
           python publish_products_from_hyp3_to_asf.py \
           --cmr-domain ${{ matrix.cmr_domain }} \
-          --collection-concept-id ${{ matrix.collection_concept_id }} \
+          --collection-short_name ${{ matrix.collection_short_name }} \
           --hyp3-urls ${{ matrix.hyp3_urls }} \
           --job-type ${{ matrix.job_type }} \
           ${{ secrets.EARTHDATA_USERNAME }} \

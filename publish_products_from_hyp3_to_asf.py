@@ -36,13 +36,13 @@ def generate_ingest_message(hyp3_job_dict: dict, response_topic_arn: str):
     }
 
 
-def get_cmr_product_ids(cmr_domain, collection_concept_id):
-    print(f'Querying {cmr_domain} for GUNW products in collection {collection_concept_id}')
+def get_cmr_product_ids(cmr_domain, collection_short_name):
+    print(f'Querying {cmr_domain} for GUNW products in collection {collection_short_name}')
     session = requests.Session()
     cmr_url = urljoin(cmr_domain, '/search/granules.json')
     search_params = {
         'provider': 'ASF',
-        'collection_concept_id': collection_concept_id,
+        'collection_short_name': collection_short_name,
         'page_size': 2000,
     }
     headers = {}
@@ -86,11 +86,11 @@ def publish_messages(messages: list, topic_arn: str, dry_run: bool):
             )
 
 
-def main(hyp3_urls: list, job_type: str, cmr_domain: str, collection_concept_id: str, topic_arn: str,
+def main(hyp3_urls: list, job_type: str, cmr_domain: str, collection_short_name: str, topic_arn: str,
          username: str, password: str, dry_run: bool, response_topic_arn: str):
     hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, username, password)
     ingest_messages = [generate_ingest_message(job, response_topic_arn) for job in hyp3_jobs]
-    cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_concept_id))
+    cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_short_name))
     ingest_messages = [message for message in ingest_messages if message['ProductName'] not in cmr_product_ids]
     publish_messages(ingest_messages, topic_arn, dry_run)
 
@@ -101,8 +101,8 @@ def get_args():
                         choices=['https://cmr.earthdata.nasa.gov', 'https://cmr.uat.earthdata.nasa.gov'])
     parser.add_argument('--job-type', default='INSAR_ISCE',
                         choices=['INSAR_ISCE', 'INSAR_ISCE_TEST'])
-    parser.add_argument('--collection-concept-id', default='C1595422627-ASF',
-                        choices=['C1595422627-ASF', 'C1225776654-ASF'])
+    parser.add_argument('--collection-short_name', default='ARIA_S1_GUNW',
+                        choices=['ARIA_S1_GUNW'])
     parser.add_argument('--hyp3-urls', nargs='+',
                         default=['https://hyp3-a19-jpl.asf.alaska.edu', 'https://hyp3-tibet-jpl.asf.alaska.edu',
                                  'https://hyp3-nisar-jpl.asf.alaska.edu'],
@@ -119,5 +119,5 @@ def get_args():
 # assumes you have AWS credentials with permission to publish to the SNS topic
 if __name__ == '__main__':
     args = get_args()
-    main(args.hyp3_urls, args.job_type, args.cmr_domain, args.collection_concept_id, args.topic_arn,
+    main(args.hyp3_urls, args.job_type, args.cmr_domain, args.collection_short_name, args.topic_arn,
          args.username, args.password, args.dry_run, args.response_topic_arn)
