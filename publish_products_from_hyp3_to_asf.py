@@ -42,7 +42,7 @@ def get_cmr_product_ids(cmr_domain, collection_short_name):
     cmr_url = urljoin(cmr_domain, '/search/granules.json')
     search_params = {
         'provider': 'ASF',
-        'collection_short_name': collection_short_name,
+        'short_name': collection_short_name,
         'page_size': 2000,
     }
     headers = {}
@@ -56,7 +56,7 @@ def get_cmr_product_ids(cmr_domain, collection_short_name):
             break
         headers = {'CMR-Search-After': response.headers['CMR-Search-After']}
 
-    product_ids = [product['producer_granule_id'] for product in products]
+    product_ids = [product['title'] for product in products]
     print(f'Found {len(product_ids)} products in CMR')
     return product_ids
 
