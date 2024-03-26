@@ -37,7 +37,7 @@ jobs:
       - run: |
           python publish_products_from_hyp3_to_asf.py \
           --cmr-domain ${{ matrix.cmr_domain }} \
-          --collection-short_name ${{ matrix.collection_short_name }} \
+          --collection-short-name ${{ matrix.collection_short_name }} \
           --hyp3-urls ${{ matrix.hyp3_urls }} \
           --job-type ${{ matrix.job_type }} \
           ${{ secrets.EARTHDATA_USERNAME }} \

@@ -101,7 +101,7 @@ def get_args():
                         choices=['https://cmr.earthdata.nasa.gov', 'https://cmr.uat.earthdata.nasa.gov'])
     parser.add_argument('--job-type', default='INSAR_ISCE',
                         choices=['INSAR_ISCE', 'INSAR_ISCE_TEST'])
-    parser.add_argument('--collection-short_name', default='ARIA_S1_GUNW',
+    parser.add_argument('--collection-short-name', default='ARIA_S1_GUNW',
                         choices=['ARIA_S1_GUNW'])
     parser.add_argument('--hyp3-urls', nargs='+',
                         default=['https://hyp3-a19-jpl.asf.alaska.edu', 'https://hyp3-tibet-jpl.asf.alaska.edu',
