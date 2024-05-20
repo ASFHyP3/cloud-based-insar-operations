@@ -20,8 +20,8 @@ jobs:
             cmr_domain: https://cmr.earthdata.nasa.gov
             collection_short_name: ARIA_S1_GUNW
             hyp3_urls: https://hyp3-a19-jpl.asf.alaska.edu https://hyp3-tibet-jpl.asf.alaska.edu
-            job_type: INSAR_ISCE
-            start: 2024-01-01T00:00:00+00:00
+            job_type: INSAR_ISCE ARIA_RAIDER
+            start: 2024-04-01T00:00:00+00:00
 
     environment: ${{ matrix.environment }}
     steps:
