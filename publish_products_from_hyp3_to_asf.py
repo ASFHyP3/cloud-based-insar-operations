@@ -87,11 +87,14 @@ def publish_messages(messages: list, topic_arn: str, dry_run: bool):
 
 
 def main(hyp3_urls: list, job_type: str, start: datetime, cmr_domain: str, collection_short_name: str, topic_arn: str,
-         username: str, password: str, dry_run: bool, response_topic_arn: str):
+         username: str, password: str, dry_run: bool, response_topic_arn: str, overwrite: bool = False):
     hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, start, username, password)
     ingest_messages = [generate_ingest_message(job, response_topic_arn) for job in hyp3_jobs]
-    cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_short_name))
-    ingest_messages = [message for message in ingest_messages if message['ProductName'] not in cmr_product_ids]
+
+    if not overwrite:
+        cmr_product_ids = set(get_cmr_product_ids(cmr_domain, collection_short_name))
+        ingest_messages = [message for message in ingest_messages if message['ProductName'] not in cmr_product_ids]
+
     publish_messages(ingest_messages, topic_arn, dry_run)
 
 
@@ -102,12 +105,16 @@ def parse_datetime(s: str) -> datetime.datetime:
     return dt
 
 
+def str_to_bool(s: str) -> bool:
+    return True if s.lower() == 'true' else False
+
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--cmr-domain', default='https://cmr.earthdata.nasa.gov',
                         choices=['https://cmr.earthdata.nasa.gov', 'https://cmr.uat.earthdata.nasa.gov'])
     parser.add_argument('--job-type', default='INSAR_ISCE',
-                        choices=['INSAR_ISCE', 'INSAR_ISCE_TEST'])
+                        choices=['INSAR_ISCE', 'INSAR_ISCE_TEST', 'ARIA_RAIDER'])
     parser.add_argument('--start', type=parse_datetime)
     parser.add_argument('--collection-short-name', default='ARIA_S1_GUNW',
                         choices=['ARIA_S1_GUNW'])
@@ -117,6 +124,7 @@ def get_args():
                         choices=['https://hyp3-a19-jpl.asf.alaska.edu', 'https://hyp3-tibet-jpl.asf.alaska.edu',
                                  'https://hyp3-nisar-jpl.asf.alaska.edu'])
     parser.add_argument('--dry-run', action='store_true')
+    parser.add_argument('--overwrite', type=str_to_bool)
     parser.add_argument('username')
     parser.add_argument('password')
     parser.add_argument('topic_arn')
@@ -128,4 +136,4 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     main(args.hyp3_urls, args.job_type, args.start, args.cmr_domain, args.collection_short_name, args.topic_arn,
-         args.username, args.password, args.dry_run, args.response_topic_arn)
+         args.username, args.password, args.dry_run, args.response_topic_arn, args.overwrite)
