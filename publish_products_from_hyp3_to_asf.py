@@ -86,7 +86,7 @@ def publish_messages(messages: list, topic_arn: str, dry_run: bool):
             )
 
 
-def main(hyp3_urls: list, job_type: str | list, start: datetime, cmr_domain: str, collection_short_name: str, 
+def main(hyp3_urls: list, job_type: str | list, start: datetime, cmr_domain: str, collection_short_name: str,
          topic_arn: str, username: str, password: str, dry_run: bool, response_topic_arn: str):
     hyp3_jobs = get_hyp3_jobs(hyp3_urls, job_type, start, username, password)
     ingest_messages = [generate_ingest_message(job, response_topic_arn) for job in hyp3_jobs]
