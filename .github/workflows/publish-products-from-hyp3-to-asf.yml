@@ -27,7 +27,7 @@ jobs:
             collection_short_name: ARIA_S1_GUNW
             hyp3_urls: https://hyp3-a19-jpl.asf.alaska.edu
             job_type: ARIA_RAIDER
-            start: 2024-01-01T00:00:00+00:00
+            start: 2024-05-01T00:00:00+00:00
 
     environment: ${{ matrix.environment }}
     steps:
