@@ -107,7 +107,7 @@ def get_args():
     parser.add_argument('--cmr-domain', default='https://cmr.earthdata.nasa.gov',
                         choices=['https://cmr.earthdata.nasa.gov', 'https://cmr.uat.earthdata.nasa.gov'])
     parser.add_argument('--job-type', default='INSAR_ISCE',
-                        choices=['INSAR_ISCE', 'INSAR_ISCE_TEST'])
+                        choices=['INSAR_ISCE', 'ARIA_RAIDER'])
     parser.add_argument('--start', type=parse_datetime)
     parser.add_argument('--collection-short-name', default='ARIA_S1_GUNW',
                         choices=['ARIA_S1_GUNW'])
