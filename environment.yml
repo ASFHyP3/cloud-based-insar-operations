@@ -1,0 +1,11 @@
+name: cloud-based-insar-operations
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.10
+  - pip
+  - ipython
+  - tqdm
+  - pip:
+      - -r requirements.txt
