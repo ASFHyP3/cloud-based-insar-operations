@@ -46,7 +46,7 @@ suppress-dummy-args = true
 "*" = ["D1"]
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.10"
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_unreachable = true
