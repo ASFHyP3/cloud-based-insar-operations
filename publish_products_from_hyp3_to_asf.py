@@ -43,9 +43,9 @@ def get_cmr_product_ids(cmr_domain: str, collection_short_name: str) -> list[str
     search_params = {
         'provider': 'ASF',
         'short_name': collection_short_name,
-        'page_size': 2000,
+        'page_size': '2000',
     }
-    headers = {}
+    headers: dict = {}
 
     products = []
     while True:
@@ -61,7 +61,7 @@ def get_cmr_product_ids(cmr_domain: str, collection_short_name: str) -> list[str
     return product_ids
 
 
-def get_hyp3_jobs(hyp3_urls: list, job_type: str, start: datetime, username: str, password: str) -> list[dict]:
+def get_hyp3_jobs(hyp3_urls: list, job_type: str, start: datetime.datetime, username: str, password: str) -> list[dict]:
     print(f'Querying {hyp3_urls} as user {username} for GUNW products ({job_type} jobs) since {start}')
     jobs = []
     for hyp3_url in hyp3_urls:
@@ -89,7 +89,7 @@ def publish_messages(messages: list, topic_arn: str, dry_run: bool) -> None:
 def main(
     hyp3_urls: list,
     job_type: str,
-    start: datetime,
+    start: datetime.datetime,
     cmr_domain: str,
     collection_short_name: str,
     topic_arn: str,
