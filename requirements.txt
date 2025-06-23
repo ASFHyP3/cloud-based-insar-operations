@@ -1,5 +1,5 @@
 boto3==1.38.36
 hyp3_sdk==7.5.0
-mypy==1.16.0
+mypy==1.16.1
 requests==2.32.4
 ruff==0.12.0
